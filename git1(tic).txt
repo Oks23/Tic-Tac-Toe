@@ -19,13 +19,11 @@ public static final int SYMBOL_SIZE = CELL_SIZE - CELL_PADDING * 2;
 public static final int SYMBOL_STROKE_WIDTH = 8; 
 
 // використовую для показу різних можливих ходів
-public enum GameState {
-PLAYING, DRAW, CROSS_WON, NOUGHT_WON}
+public enum GameState { LAYING, DRAW, CROSS_WON, NOUGHT_WON }
 private GameState currentState;  // поточний стан гри
 
 // показує, що у нас в клітинці
-public enum Seed {
-EMPTY, CROSS, NOUGHT }
+public enum Seed { EMPTY, CROSS, NOUGHT }
 private Seed currentPlayer;  // поточний гравець
 private Seed[][] board   ; // борд гри
 private DrawCanvas canvas; // canvas для борду гри
@@ -56,7 +54,6 @@ updateGame(currentPlayer, rowSelected, colSelected); // оновлюємо ст�
 // змінюємо гравця
 currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;}} 
 else {
-
 // завершення гри
 initGame(); // починаємо гру спочатку}
 repaint();  }});
@@ -97,7 +94,9 @@ for (int row = 0; row < ROWS; ++row) {
 for (int col = 0; col < COLS; ++col) {
 if (board[row][col] == Seed.EMPTY) {
 return false; // є пуста клітинка
-}}}
+}
+   }
+      }
 return true;  // нема пустої клітинки
    }
 /** повертає true якщо гравець з ходом виграв(rowSelected, colSelected) */
@@ -129,37 +128,44 @@ setBackground(Color.GRAY); // обираємо колір для задньог�
 // малюємо поле
 g.setColor(Color.LIGHT_GRAY);
 for (int row = 1; row < ROWS; ++row) {
-g.fillRoundRect(0, CELL_SIZE * row - GRID_WIDHT_HALF,CANVAS_WIDTH-1, GRID_WIDTH, GRID_WIDTH, GRID_WIDTH);}
+g.fillRoundRect(0, CELL_SIZE * row - GRID_WIDHT_HALF,CANVAS_WIDTH-1, GRID_WIDTH, GRID_WIDTH, GRID_WIDTH);
+}
 for (int col = 1; col < COLS; ++col) {
-g.fillRoundRect(CELL_SIZE * col - GRID_WIDHT_HALF, 0, GRID_WIDTH, CANVAS_HEIGHT-1, GRID_WIDTH, GRID_WIDTH);}
+g.fillRoundRect(CELL_SIZE * col - GRID_WIDHT_HALF, 0, GRID_WIDTH, CANVAS_HEIGHT-1, GRID_WIDTH, GRID_WIDTH);
+}
 
 // використовуємо Graphics2D, що дозволяє встановити обведення пера
 Graphics2D g2d = (Graphics2D)g;
-g2d.setStroke(new BasicStroke(SYMBOL_STROKE_WIDTH, BasicStroke.CAP_ROUND,
-BasicStroke.JOIN_ROUND));  // лише Graphics2D 
+g2d.setStroke(new BasicStroke( SYMBOL_STROKE_WIDTH, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));  // лише Graphics2D 
 for (int row = 0; row < ROWS; ++row) {
 for (int col = 0; col < COLS; ++col) {
 int x1 = col * CELL_SIZE + CELL_PADDING;
 int y1 = row * CELL_SIZE + CELL_PADDING;
-if (board[row][col] == Seed.CROSS) {                 g2d.setColor(Color.GREEN);
+if (board[row][col] == Seed.CROSS) {          
+g2d.setColor(Color.GREEN);
 int x2 = (col + 1) * CELL_SIZE - CELL_PADDING;
 int y2 = (row + 1) * CELL_SIZE - CELL_PADDING;
 g2d.drawLine(x1, y1, x2, y2);
 g2d.drawLine(x2, y1, x1, y2);
-} else if (board[row][col] == Seed.NOUGHT) {                  g2d.setColor(Color.BLUE);
+} else if (board[row][col] == Seed.NOUGHT) {            
+g2d.setColor(Color.BLUE);
 g2d.drawOval(x1, y1, SYMBOL_SIZE, SYMBOL_SIZE);}}}
 
 // виводимо повідомлення
-if (currentState == GameState.PLAYING){           statusBar.setForeground(Color.BLACK);
+if (currentState == GameState.PLAYING){          
+statusBar.setForeground(Color.BLACK);
 if (currentPlayer == Seed.CROSS) {
 statusBar.setText("X's Turn");
 } else {
 statusBar.setText("O's Turn");}
-} else if (currentState == GameState.DRAW) {           statusBar.setForeground(Color.RED);
+} else if (currentState == GameState.DRAW) {          
+statusBar.setForeground(Color.RED);
 statusBar.setText("It's a Draw! Click to play again.");
-} else if (currentState == GameState.CROSS_WON) {         statusBar.setForeground(Color.RED);
+} else if (currentState == GameState.CROSS_WON) {        
+statusBar.setForeground(Color.RED);
 statusBar.setText("'X' Won! Click to play again.");
-} else if (currentState == GameState.NOUGHT_WON) {           statusBar.setForeground(Color.RED);
+} else if (currentState == GameState.NOUGHT_WON) {         
+statusBar.setForeground(Color.RED);
 statusBar.setText("'O' Won! Click to play again.");}}}
 public static void main(String[] args){
 SwingUtilities.invokeLater(new Runnable() {
